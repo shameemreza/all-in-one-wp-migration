@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2019 ServMask Inc.
+ * Copyright (C) 2014-2018 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,24 +22,27 @@
  * ███████║███████╗██║  ██║ ╚████╔╝ ██║ ╚═╝ ██║██║  ██║███████║██║  ██╗
  * ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  */
-
-if ( ! defined( 'ABSPATH' ) ) {
-	die( 'Kangaroos cannot jump here' );
-}
 ?>
 
 <div class="ai1wm-feedback">
 	<ul class="ai1wm-feedback-types">
 		<li>
-			<input type="radio" class="ai1wm-flat-radio-button ai1wm-feedback-type" id="ai1wm-feedback-type-1" name="ai1wm_feedback_type" value="suggestions" />
-			<a id="ai1wm-feedback-type-link-1" href="https://feedback.wp-migration.com" target="_blank">
+			<input type="radio" class="ai1wm-flat-radio-button ai1wm-feedback-type" id="ai1wm-feedback-type-1" name="ai1wm_feedback_type" value="review" />
+			<a id="ai1wm-feedback-type-link-1" href="https://wordpress.org/support/view/plugin-reviews/all-in-one-wp-migration?rate=5#postform" target="_blank">
+				<i></i>
+				<span><?php _e( 'I would like to review this plugin', AI1WM_PLUGIN_NAME ); ?></span>
+			</a>
+		</li>
+		<li>
+			<input type="radio" class="ai1wm-flat-radio-button ai1wm-feedback-type" id="ai1wm-feedback-type-2" name="ai1wm_feedback_type" value="suggestions" />
+			<a id="ai1wm-feedback-type-link-2" href="https://feedback.wp-migration.com" target="_blank">
 				<i></i>
 				<span><?php _e( 'I have ideas to improve this plugin', AI1WM_PLUGIN_NAME ); ?></span>
 			</a>
 		</li>
 		<li>
-			<input type="radio" class="ai1wm-flat-radio-button ai1wm-feedback-type" id="ai1wm-feedback-type-2" name="ai1wm_feedback_type" value="help-needed" />
-			<label for="ai1wm-feedback-type-2">
+			<input type="radio" class="ai1wm-flat-radio-button ai1wm-feedback-type" id="ai1wm-feedback-type-3" name="ai1wm_feedback_type" value="help-needed" />
+			<label for="ai1wm-feedback-type-3">
 				<i></i>
 				<span><?php _e( 'I need help with this plugin', AI1WM_PLUGIN_NAME ); ?></span>
 			</label>

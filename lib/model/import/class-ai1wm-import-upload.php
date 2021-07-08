@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2019 ServMask Inc.
+ * Copyright (C) 2014-2018 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,10 +22,6 @@
  * ███████║███████╗██║  ██║ ╚████╔╝ ██║ ╚═╝ ██║██║  ██║███████║██║  ██╗
  * ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  */
-
-if ( ! defined( 'ABSPATH' ) ) {
-	die( 'Kangaroos cannot jump here' );
-}
 
 class Ai1wm_Import_Upload {
 
@@ -78,9 +74,9 @@ class Ai1wm_Import_Upload {
 			case UPLOAD_ERR_FORM_SIZE:
 			case UPLOAD_ERR_PARTIAL:
 			case UPLOAD_ERR_NO_FILE:
-				// File is too large
+				// File is too large, reduce the size and try again
 				throw new Ai1wm_Import_Retry_Exception(
-					__( 'The file is too large for this server.', AI1WM_PLUGIN_NAME ),
+					__( 'The file is too large, retrying with smaller size.', AI1WM_PLUGIN_NAME ),
 					413
 				);
 			case UPLOAD_ERR_NO_TMP_DIR:

@@ -33,10 +33,6 @@
  * @link      https://github.com/yani-/bandar/
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	die( 'Kangaroos cannot jump here' );
-}
-
 /**
  * TemplateDoesNotExistException
  *

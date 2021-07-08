@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2019 ServMask Inc.
+ * Copyright (C) 2014-2018 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,10 +22,6 @@
  * ███████║███████╗██║  ██║ ╚████╔╝ ██║ ╚═╝ ██║██║  ██║███████║██║  ██╗
  * ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  */
-
-if ( ! defined( 'ABSPATH' ) ) {
-	die( 'Kangaroos cannot jump here' );
-}
 ?>
 
 <div class="ai1wm-field-set">
@@ -61,7 +57,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</label>
 			</li>
 
-			<?php do_action( 'ai1wm_export_inactive_themes' ); ?>
+			<?php if ( apply_filters( 'ai1wm_max_file_size', AI1WM_MAX_FILE_SIZE ) === 0 ) : ?>
+				<li>
+					<label for="ai1wm-no-inactive-themes">
+						<input type="checkbox" id="ai1wm-no-inactive-themes" name="options[no_inactive_themes]" />
+						<?php _e( 'Do <strong>not</strong> export inactive themes (files)', AI1WM_PLUGIN_NAME ); ?>
+						<small style="color: red;"><?php _e( 'new', AI1WM_PLUGIN_NAME ); ?></small>
+					</label>
+				</li>
+			<?php endif; ?>
 
 			<li>
 				<label for="ai1wm-no-muplugins">
@@ -77,9 +81,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</label>
 			</li>
 
-			<?php do_action( 'ai1wm_export_inactive_plugins' ); ?>
-
-			<?php do_action( 'ai1wm_export_cache_files' ); ?>
+			<?php if ( apply_filters( 'ai1wm_max_file_size', AI1WM_MAX_FILE_SIZE ) === 0 ) : ?>
+				<li>
+					<label for="ai1wm-no-inactive-plugins">
+						<input type="checkbox" id="ai1wm-no-inactive-plugins" name="options[no_inactive_plugins]" />
+						<?php _e( 'Do <strong>not</strong> export inactive plugins (files)', AI1WM_PLUGIN_NAME ); ?>
+						<small style="color: red;"><?php _e( 'new', AI1WM_PLUGIN_NAME ); ?></small>
+					</label>
+				</li>
+				<li>
+					<label for="ai1wm-no-cache">
+						<input type="checkbox" id="ai1wm-no-cache" name="options[no_cache]" />
+						<?php _e( 'Do <strong>not</strong> export cache (files)', AI1WM_PLUGIN_NAME ); ?>
+						<small style="color: red;"><?php _e( 'new', AI1WM_PLUGIN_NAME ); ?></small>
+					</label>
+				</li>
+			<?php endif; ?>
 
 			<li>
 				<label for="ai1wm-no-database">

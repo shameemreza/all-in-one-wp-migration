@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2019 ServMask Inc.
+ * Copyright (C) 2014-2018 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,10 +23,6 @@
  * ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	die( 'Kangaroos cannot jump here' );
-}
-
 class Ai1wm_Extensions {
 
 	/**
@@ -45,7 +41,7 @@ class Ai1wm_Extensions {
 				'about'    => AI1WMZE_PLUGIN_ABOUT,
 				'basename' => AI1WMZE_PLUGIN_BASENAME,
 				'version'  => AI1WMZE_VERSION,
-				'requires' => '1.19',
+				'requires' => '1.1',
 				'short'    => AI1WMZE_PLUGIN_SHORT,
 			);
 		}
@@ -58,7 +54,7 @@ class Ai1wm_Extensions {
 				'about'    => AI1WMAE_PLUGIN_ABOUT,
 				'basename' => AI1WMAE_PLUGIN_BASENAME,
 				'version'  => AI1WMAE_VERSION,
-				'requires' => '1.23',
+				'requires' => '1.3',
 				'short'    => AI1WMAE_PLUGIN_SHORT,
 			);
 		}
@@ -71,12 +67,12 @@ class Ai1wm_Extensions {
 				'about'    => AI1WMBE_PLUGIN_ABOUT,
 				'basename' => AI1WMBE_PLUGIN_BASENAME,
 				'version'  => AI1WMBE_VERSION,
-				'requires' => '1.31',
+				'requires' => '1.13',
 				'short'    => AI1WMBE_PLUGIN_SHORT,
 			);
 		}
 
-		// Add DigitalOcean Spaces Extension
+		// Add DigitalOcean Extension
 		if ( defined( 'AI1WMIE_PLUGIN_NAME' ) ) {
 			$extensions[ AI1WMIE_PLUGIN_NAME ] = array(
 				'key'      => AI1WMIE_PLUGIN_KEY,
@@ -84,7 +80,7 @@ class Ai1wm_Extensions {
 				'about'    => AI1WMIE_PLUGIN_ABOUT,
 				'basename' => AI1WMIE_PLUGIN_BASENAME,
 				'version'  => AI1WMIE_VERSION,
-				'requires' => '1.30',
+				'requires' => '1.6',
 				'short'    => AI1WMIE_PLUGIN_SHORT,
 			);
 		}
@@ -97,21 +93,8 @@ class Ai1wm_Extensions {
 				'about'    => AI1WMDE_PLUGIN_ABOUT,
 				'basename' => AI1WMDE_PLUGIN_BASENAME,
 				'version'  => AI1WMDE_VERSION,
-				'requires' => '3.50',
+				'requires' => '3.32',
 				'short'    => AI1WMDE_PLUGIN_SHORT,
-			);
-		}
-
-		// Add File Extension
-		if ( defined( 'AI1WMTE_PLUGIN_NAME' ) ) {
-			$extensions[ AI1WMTE_PLUGIN_NAME ] = array(
-				'key'      => AI1WMTE_PLUGIN_KEY,
-				'title'    => AI1WMTE_PLUGIN_TITLE,
-				'about'    => AI1WMTE_PLUGIN_ABOUT,
-				'basename' => AI1WMTE_PLUGIN_BASENAME,
-				'version'  => AI1WMTE_VERSION,
-				'requires' => '1.5',
-				'short'    => AI1WMTE_PLUGIN_SHORT,
 			);
 		}
 
@@ -123,7 +106,7 @@ class Ai1wm_Extensions {
 				'about'    => AI1WMFE_PLUGIN_ABOUT,
 				'basename' => AI1WMFE_PLUGIN_BASENAME,
 				'version'  => AI1WMFE_VERSION,
-				'requires' => '2.55',
+				'requires' => '2.37',
 				'short'    => AI1WMFE_PLUGIN_SHORT,
 			);
 		}
@@ -136,7 +119,7 @@ class Ai1wm_Extensions {
 				'about'    => AI1WMCE_PLUGIN_ABOUT,
 				'basename' => AI1WMCE_PLUGIN_BASENAME,
 				'version'  => AI1WMCE_VERSION,
-				'requires' => '1.20',
+				'requires' => '1.0',
 				'short'    => AI1WMCE_PLUGIN_SHORT,
 			);
 		}
@@ -149,7 +132,7 @@ class Ai1wm_Extensions {
 				'about'    => AI1WMGE_PLUGIN_ABOUT,
 				'basename' => AI1WMGE_PLUGIN_BASENAME,
 				'version'  => AI1WMGE_VERSION,
-				'requires' => '2.54',
+				'requires' => '2.36',
 				'short'    => AI1WMGE_PLUGIN_SHORT,
 			);
 		}
@@ -162,7 +145,7 @@ class Ai1wm_Extensions {
 				'about'    => AI1WMRE_PLUGIN_ABOUT,
 				'basename' => AI1WMRE_PLUGIN_BASENAME,
 				'version'  => AI1WMRE_VERSION,
-				'requires' => '1.19',
+				'requires' => '1.0',
 				'short'    => AI1WMRE_PLUGIN_SHORT,
 			);
 		}
@@ -175,7 +158,7 @@ class Ai1wm_Extensions {
 				'about'    => AI1WMEE_PLUGIN_ABOUT,
 				'basename' => AI1WMEE_PLUGIN_BASENAME,
 				'version'  => AI1WMEE_VERSION,
-				'requires' => '1.28',
+				'requires' => '1.10',
 				'short'    => AI1WMEE_PLUGIN_SHORT,
 			);
 		}
@@ -188,7 +171,7 @@ class Ai1wm_Extensions {
 				'about'    => AI1WMME_PLUGIN_ABOUT,
 				'basename' => AI1WMME_PLUGIN_BASENAME,
 				'version'  => AI1WMME_VERSION,
-				'requires' => '3.76',
+				'requires' => '3.59',
 				'short'    => AI1WMME_PLUGIN_SHORT,
 			);
 		}
@@ -201,7 +184,7 @@ class Ai1wm_Extensions {
 				'about'    => AI1WMOE_PLUGIN_ABOUT,
 				'basename' => AI1WMOE_PLUGIN_BASENAME,
 				'version'  => AI1WMOE_VERSION,
-				'requires' => '1.42',
+				'requires' => '1.23',
 				'short'    => AI1WMOE_PLUGIN_SHORT,
 			);
 		}
@@ -214,21 +197,8 @@ class Ai1wm_Extensions {
 				'about'    => AI1WMPE_PLUGIN_ABOUT,
 				'basename' => AI1WMPE_PLUGIN_BASENAME,
 				'version'  => AI1WMPE_VERSION,
-				'requires' => '1.17',
+				'requires' => '1.0',
 				'short'    => AI1WMPE_PLUGIN_SHORT,
-			);
-		}
-
-		// Add S3 Client Extension
-		if ( defined( 'AI1WMNE_PLUGIN_NAME' ) ) {
-			$extensions[ AI1WMNE_PLUGIN_NAME ] = array(
-				'key'      => AI1WMNE_PLUGIN_KEY,
-				'title'    => AI1WMNE_PLUGIN_TITLE,
-				'about'    => AI1WMNE_PLUGIN_ABOUT,
-				'basename' => AI1WMNE_PLUGIN_BASENAME,
-				'version'  => AI1WMNE_VERSION,
-				'requires' => '1.14',
-				'short'    => AI1WMNE_PLUGIN_SHORT,
 			);
 		}
 
@@ -240,7 +210,7 @@ class Ai1wm_Extensions {
 				'about'    => AI1WMSE_PLUGIN_ABOUT,
 				'basename' => AI1WMSE_PLUGIN_BASENAME,
 				'version'  => AI1WMSE_VERSION,
-				'requires' => '3.48',
+				'requires' => '3.27',
 				'short'    => AI1WMSE_PLUGIN_SHORT,
 			);
 		}
@@ -253,7 +223,7 @@ class Ai1wm_Extensions {
 				'about'    => AI1WMUE_PLUGIN_ABOUT,
 				'basename' => AI1WMUE_PLUGIN_BASENAME,
 				'version'  => AI1WMUE_VERSION,
-				'requires' => '2.31',
+				'requires' => '2.18',
 				'short'    => AI1WMUE_PLUGIN_SHORT,
 			);
 		}
@@ -266,21 +236,8 @@ class Ai1wm_Extensions {
 				'about'    => AI1WMLE_PLUGIN_ABOUT,
 				'basename' => AI1WMLE_PLUGIN_BASENAME,
 				'version'  => AI1WMLE_VERSION,
-				'requires' => '2.41',
+				'requires' => '2.27',
 				'short'    => AI1WMLE_PLUGIN_SHORT,
-			);
-		}
-
-		// Add WebDAV extension
-		if ( defined( 'AI1WMWE_PLUGIN_NAME' ) ) {
-			$extensions[ AI1WMWE_PLUGIN_NAME ] = array(
-				'key'      => AI1WMWE_PLUGIN_KEY,
-				'title'    => AI1WMWE_PLUGIN_TITLE,
-				'about'    => AI1WMWE_PLUGIN_ABOUT,
-				'basename' => AI1WMWE_PLUGIN_BASENAME,
-				'version'  => AI1WMWE_VERSION,
-				'requires' => '1.16',
-				'short'    => AI1WMWE_PLUGIN_SHORT,
 			);
 		}
 

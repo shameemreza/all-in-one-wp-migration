@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2019 ServMask Inc.
+ * Copyright (C) 2014-2018 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,14 +23,9 @@
  * ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	die( 'Kangaroos cannot jump here' );
-}
-
 class Ai1wm_Feedback_Controller {
 
 	public static function feedback( $params = array() ) {
-		ai1wm_setup_environment();
 
 		// Set params
 		if ( empty( $params ) ) {
@@ -74,28 +69,12 @@ class Ai1wm_Feedback_Controller {
 			exit;
 		}
 
-		$extensions = Ai1wm_Extensions::get();
+		$model = new Ai1wm_Feedback;
 
-		// Exclude File Extension
-		if ( defined( 'AI1WMTE_PLUGIN_NAME' ) ) {
-			unset( $extensions[ AI1WMTE_PLUGIN_NAME ] );
-		}
+		// Send feedback
+		$errors = $model->add( $type, $email, $message, $terms );
 
-		$purchases = array();
-		foreach ( $extensions as $extension ) {
-			if ( ( $uuid = get_option( $extension['key'] ) ) ) {
-				$purchases[] = $uuid;
-			}
-		}
-
-		try {
-			Ai1wm_Feedback::add( $type, $email, $message, $terms, implode( PHP_EOL, $purchases ) );
-		} catch ( Ai1wm_Feedback_Exception $e ) {
-			echo json_encode( array( 'errors' => array( $e->getMessage() ) ) );
-			exit;
-		}
-
-		echo json_encode( array( 'errors' => array() ) );
+		echo json_encode( array( 'errors' => $errors ) );
 		exit;
 	}
 }

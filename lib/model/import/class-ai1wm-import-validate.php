@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2019 ServMask Inc.
+ * Copyright (C) 2014-2018 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,10 +22,6 @@
  * ███████║███████╗██║  ██║ ╚████╔╝ ██║ ╚═╝ ██║██║  ██║███████║██║  ██╗
  * ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  */
-
-if ( ! defined( 'ABSPATH' ) ) {
-	die( 'Kangaroos cannot jump here' );
-}
 
 class Ai1wm_Import_Validate {
 
@@ -86,6 +82,23 @@ class Ai1wm_Import_Validate {
 			);
 		}
 
+		$allowed_size = apply_filters( 'ai1wm_max_file_size', AI1WM_MAX_FILE_SIZE );
+
+		// Let's check the size of the file to make sure it is less than the maximum allowed
+		if ( ( $allowed_size > 0 ) && ( $total_archive_size > $allowed_size ) ) {
+			throw new Ai1wm_Import_Exception(
+				sprintf(
+					__(
+						'The file that you are trying to import is over the maximum upload file size limit of <strong>%s</strong>.<br />' .
+						'You can remove this restriction by purchasing our ' .
+						'<a href="https://servmask.com/products/unlimited-extension" target="_blank">Unlimited Extension</a>.',
+						AI1WM_PLUGIN_NAME
+					),
+					size_format( $allowed_size )
+				)
+			);
+		}
+
 		// Flag to hold if file data has been processed
 		$completed = true;
 
@@ -93,7 +106,7 @@ class Ai1wm_Import_Validate {
 			$file_bytes_written = 0;
 
 			// Unpack package.json, multisite.json and database.sql files
-			if ( ( $completed = $archive->extract_by_files_array( ai1wm_storage_path( $params ), array( AI1WM_PACKAGE_NAME, AI1WM_MULTISITE_NAME, AI1WM_DATABASE_NAME ), array(), array(), $file_bytes_written, $file_bytes_offset ) ) ) {
+			if ( ( $completed = $archive->extract_by_files_array( ai1wm_storage_path( $params ), array( AI1WM_PACKAGE_NAME, AI1WM_MULTISITE_NAME, AI1WM_DATABASE_NAME ), array(), $file_bytes_written, $file_bytes_offset ) ) ) {
 				$file_bytes_offset = 0;
 			}
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2019 ServMask Inc.
+ * Copyright (C) 2014-2018 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,10 +23,6 @@
  * ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	die( 'Kangaroos cannot jump here' );
-}
-
 class Ai1wm_Archive_Exception extends Exception {}
 class Ai1wm_Backups_Exception extends Exception {}
 class Ai1wm_Export_Exception extends Exception {}
@@ -46,6 +42,3 @@ class Ai1wm_Not_Valid_Secret_Key_Exception extends Exception {}
 class Ai1wm_Quota_Exceeded_Exception extends Exception {}
 class Ai1wm_Storage_Exception extends Exception {}
 class Ai1wm_Compatibility_Exception extends Exception {}
-class Ai1wm_Feedback_Exception extends Exception {}
-class Ai1wm_Report_Exception extends Exception {}
-class Ai1wm_Database_Exception extends Exception {}

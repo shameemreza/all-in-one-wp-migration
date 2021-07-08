@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2019 ServMask Inc.
+ * Copyright (C) 2014-2018 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,9 +23,10 @@
  * ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	die( 'Kangaroos cannot jump here' );
-}
-?>
+class Ai1wm_Recursive_Newline_Filter extends RecursiveFilterIterator {
 
-<a href="https://servmask.com/products/s3-client-extension" target="_blank">S3 Client</a>
+	public function accept() {
+		return strpos( $this->getInnerIterator()->getSubPathname(), "\n" ) === false &&
+			strpos( $this->getInnerIterator()->getSubPathname(), "\r" ) === false;
+	}
+}

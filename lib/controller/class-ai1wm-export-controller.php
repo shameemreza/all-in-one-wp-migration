@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2019 ServMask Inc.
+ * Copyright (C) 2014-2018 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,10 +23,6 @@
  * ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	die( 'Kangaroos cannot jump here' );
-}
-
 class Ai1wm_Export_Controller {
 
 	public static function index() {
@@ -34,6 +30,8 @@ class Ai1wm_Export_Controller {
 	}
 
 	public static function export( $params = array() ) {
+		global $wp_filter;
+
 		ai1wm_setup_environment();
 
 		// Set params
@@ -42,8 +40,9 @@ class Ai1wm_Export_Controller {
 		}
 
 		// Set priority
-		if ( ! isset( $params['priority'] ) ) {
-			$params['priority'] = 5;
+		$priority = 5;
+		if ( isset( $params['priority'] ) ) {
+			$priority = (int) $params['priority'];
 		}
 
 		// Set secret key
@@ -59,10 +58,19 @@ class Ai1wm_Export_Controller {
 			exit;
 		}
 
-		// Loop over filters
-		if ( ( $filters = ai1wm_get_filters( 'ai1wm_export' ) ) ) {
+		// Get hook
+		if ( isset( $wp_filter['ai1wm_export'] ) && ( $filters = $wp_filter['ai1wm_export'] ) ) {
+			// WordPress 4.7 introduces new class for working with filters/actions called WP_Hook
+			// which adds another level of abstraction and we need to address it.
+			if ( isset( $filters->callbacks ) ) {
+				$filters = $filters->callbacks;
+			}
+
+			ksort( $filters );
+
+			// Loop over filters
 			while ( $hooks = current( $filters ) ) {
-				if ( intval( $params['priority'] ) === key( $filters ) ) {
+				if ( $priority === key( $filters ) ) {
 					foreach ( $hooks as $hook ) {
 						try {
 
@@ -73,12 +81,8 @@ class Ai1wm_Export_Controller {
 							Ai1wm_Log::export( $params );
 
 						} catch ( Exception $e ) {
-							if ( defined( 'WP_CLI' ) ) {
-								WP_CLI::error( sprintf( __( 'Unable to export: %s', AI1WM_PLUGIN_NAME ), $e->getMessage() ) );
-							} else {
-								Ai1wm_Status::error( __( 'Unable to export', AI1WM_PLUGIN_NAME ), $e->getMessage() );
-								Ai1wm_Notification::error( __( 'Unable to export', AI1WM_PLUGIN_NAME ), $e->getMessage() );
-							}
+							Ai1wm_Status::error( __( 'Unable to export', AI1WM_PLUGIN_NAME ), $e->getMessage() );
+							Ai1wm_Notification::error( __( 'Unable to export', AI1WM_PLUGIN_NAME ), $e->getMessage() );
 							Ai1wm_Directory::delete( ai1wm_storage_path( $params ) );
 							exit;
 						}
@@ -92,19 +96,13 @@ class Ai1wm_Export_Controller {
 
 					// Do request
 					if ( $completed === false || ( $next = next( $filters ) ) && ( $params['priority'] = key( $filters ) ) ) {
-						if ( defined( 'WP_CLI' ) ) {
-							if ( ! defined( 'DOING_CRON' ) ) {
-								continue;
-							}
-						}
-
 						if ( isset( $params['ai1wm_manual_export'] ) ) {
 							echo json_encode( $params );
 							exit;
 						}
 
 						wp_remote_post( apply_filters( 'ai1wm_http_export_url', admin_url( 'admin-ajax.php?action=ai1wm_export' ) ), array(
-							'timeout'   => apply_filters( 'ai1wm_http_export_timeout', 10 ),
+							'timeout'   => apply_filters( 'ai1wm_http_export_timeout', 5 ),
 							'blocking'  => apply_filters( 'ai1wm_http_export_blocking', false ),
 							'sslverify' => apply_filters( 'ai1wm_http_export_sslverify', false ),
 							'headers'   => apply_filters( 'ai1wm_http_export_headers', array() ),
@@ -117,8 +115,6 @@ class Ai1wm_Export_Controller {
 				next( $filters );
 			}
 		}
-
-		return $params;
 	}
 
 	public static function buttons() {
@@ -137,8 +133,6 @@ class Ai1wm_Export_Controller {
 			apply_filters( 'ai1wm_export_azure_storage', Ai1wm_Template::get_content( 'export/button-azure-storage' ) ),
 			apply_filters( 'ai1wm_export_glacier', Ai1wm_Template::get_content( 'export/button-glacier' ) ),
 			apply_filters( 'ai1wm_export_pcloud', Ai1wm_Template::get_content( 'export/button-pcloud' ) ),
-			apply_filters( 'ai1wm_export_webdav', Ai1wm_Template::get_content( 'export/button-webdav' ) ),
-			apply_filters( 'ai1wm_export_s3_client', Ai1wm_Template::get_content( 'export/button-s3-client' ) ),
 		);
 	}
 
@@ -150,30 +144,5 @@ class Ai1wm_Export_Controller {
 		}
 
 		return $headers;
-	}
-
-	public static function cleanup() {
-		try {
-			// Iterate over storage directory
-			$iterator = new Ai1wm_Recursive_Directory_Iterator( AI1WM_STORAGE_PATH );
-
-			// Exclude index.php
-			$iterator = new Ai1wm_Recursive_Exclude_Filter( $iterator, array( 'index.php' ) );
-
-			// Loop over folders and files
-			foreach ( $iterator as $item ) {
-				try {
-					if ( $item->getMTime() < ( time() - AI1WM_MAX_STORAGE_CLEANUP ) ) {
-						if ( $item->isDir() ) {
-							Ai1wm_Directory::delete( $item->getPathname() );
-						} else {
-							Ai1wm_File::delete( $item->getPathname() );
-						}
-					}
-				} catch ( Exception $e ) {
-				}
-			}
-		} catch ( Exception $e ) {
-		}
 	}
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2019 ServMask Inc.
+ * Copyright (C) 2014-2018 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,19 +23,15 @@
  * ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	die( 'Kangaroos cannot jump here' );
-}
-
 class Ai1wm_Template extends Bandar {
 
 	/**
 	 * Renders a file and returns its contents
 	 *
-	 * @param  string      $view View to render
-	 * @param  array       $args Set of arguments
-	 * @param  string|bool $path Path to template
-	 * @return string            Rendered view
+	 * @param  string $file View to render
+	 * @param  array  $args Set of arguments
+	 *
+	 * @return string       Rendered view
 	 */
 	public static function render( $view, $args = array(), $path = false ) {
 		parent::render( $view, $args, $path );
@@ -44,23 +40,15 @@ class Ai1wm_Template extends Bandar {
 	/**
 	 * Returns link to an asset file
 	 *
-	 * @param  string $asset  Asset file
-	 * @param  string $prefix Asset prefix
-	 * @return string         Asset URL
+	 * @param  string $asset Asset file
+	 *
+	 * @return string        Asset URL
 	 */
 	public static function asset_link( $asset, $prefix = 'AI1WM' ) {
 		return constant( $prefix . '_URL' ) . '/lib/view/assets/' . $asset . '?v=' . constant( $prefix . '_VERSION' );
 	}
 
-	/**
-	 * Renders a file and gets its contents
-	 *
-	 * @param  string      $view View to render
-	 * @param  array       $args Set of arguments
-	 * @param  string|bool $path Path to template
-	 * @return string            Rendered view
-	 */
-	public static function get_content( $view, $args = array(), $path = false ) {
-		return parent::getTemplateContent( $view, $args, $path );
+	public static function get_content( $template, $args = array(), $path = false ) {
+		return parent::getTemplateContent( $template, $args, $path );
 	}
 }

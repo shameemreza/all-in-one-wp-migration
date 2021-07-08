@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2019 ServMask Inc.
+ * Copyright (C) 2014-2018 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,18 +23,15 @@
  * ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	die( 'Kangaroos cannot jump here' );
-}
-
 class Ai1wm_Backups_Controller {
 
 	public static function index() {
+		$model = new Ai1wm_Backups;
+
 		Ai1wm_Template::render(
 			'backups/index',
 			array(
-				'backups'  => Ai1wm_Backups::get_files(),
-				'labels'   => Ai1wm_Backups::get_labels(),
+				'backups'  => $model->get_files(),
 				'username' => get_option( AI1WM_AUTH_USER ),
 				'password' => get_option( AI1WM_AUTH_PASSWORD ),
 			)
@@ -42,7 +39,7 @@ class Ai1wm_Backups_Controller {
 	}
 
 	public static function delete( $params = array() ) {
-		ai1wm_setup_environment();
+		$errors = array();
 
 		// Set params
 		if ( empty( $params ) ) {
@@ -68,90 +65,16 @@ class Ai1wm_Backups_Controller {
 			exit;
 		}
 
-		try {
-			Ai1wm_Backups::delete_file( $archive );
-			Ai1wm_Backups::delete_label( $archive );
-		} catch ( Ai1wm_Backups_Exception $e ) {
-			echo json_encode( array( 'errors' => array( $e->getMessage() ) ) );
-			exit;
-		}
-
-		echo json_encode( array( 'errors' => array() ) );
-		exit;
-	}
-
-	public static function add_label( $params = array() ) {
-		ai1wm_setup_environment();
-
-		// Set params
-		if ( empty( $params ) ) {
-			$params = stripslashes_deep( $_POST );
-		}
-
-		// Set secret key
-		$secret_key = null;
-		if ( isset( $params['secret_key'] ) ) {
-			$secret_key = trim( $params['secret_key'] );
-		}
-
-		// Set archive
-		$archive = null;
-		if ( isset( $params['archive'] ) ) {
-			$archive = trim( $params['archive'] );
-		}
-
-		// Set backup label
-		$label = null;
-		if ( isset( $params['label'] ) ) {
-			$label = trim( $params['label'] );
-		}
+		$model = new Ai1wm_Backups;
 
 		try {
-			// Ensure that unauthorized people cannot access add label action
-			ai1wm_verify_secret_key( $secret_key );
-		} catch ( Ai1wm_Not_Valid_Secret_Key_Exception $e ) {
-			exit;
+			// Delete file
+			$model->delete_file( $archive );
+		} catch ( Exception $e ) {
+			$errors[] = $e->getMessage();
 		}
 
-		try {
-			Ai1wm_Backups::set_label( $archive, $label );
-		} catch ( Ai1wm_Backups_Exception $e ) {
-			echo json_encode( array( 'errors' => array( $e->getMessage() ) ) );
-			exit;
-		}
-
-		echo json_encode( array( 'errors' => array() ) );
-		exit;
-	}
-
-	public static function backup_list( $params = array() ) {
-		ai1wm_setup_environment();
-
-		// Set params
-		if ( empty( $params ) ) {
-			$params = stripslashes_deep( $_GET );
-		}
-
-		// Set secret key
-		$secret_key = null;
-		if ( isset( $params['secret_key'] ) ) {
-			$secret_key = trim( $params['secret_key'] );
-		}
-
-		try {
-			// Ensure that unauthorized people cannot access backups list action
-			ai1wm_verify_secret_key( $secret_key );
-		} catch ( Ai1wm_Not_Valid_Secret_Key_Exception $e ) {
-			exit;
-		}
-
-		Ai1wm_Template::render(
-			'backups/backups-list',
-			array(
-				'backups' => Ai1wm_Backups::get_files(),
-				'labels'  => Ai1wm_Backups::get_labels(),
-			)
-		);
+		echo json_encode( array( 'errors' => $errors ) );
 		exit;
 	}
 }

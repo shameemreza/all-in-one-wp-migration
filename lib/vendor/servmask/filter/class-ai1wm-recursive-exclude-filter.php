@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2019 ServMask Inc.
+ * Copyright (C) 2014-2018 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,10 +23,6 @@
  * ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	die( 'Kangaroos cannot jump here' );
-}
-
 class Ai1wm_Recursive_Exclude_Filter extends RecursiveFilterIterator {
 
 	protected $exclude = array();
@@ -39,19 +35,7 @@ class Ai1wm_Recursive_Exclude_Filter extends RecursiveFilterIterator {
 	}
 
 	public function accept() {
-		if ( in_array( $this->getInnerIterator()->getSubPathname(), $this->exclude ) ) {
-			return false;
-		}
-
-		if ( strpos( $this->getInnerIterator()->getSubPathname(), "\n" ) !== false ) {
-			return false;
-		}
-
-		if ( strpos( $this->getInnerIterator()->getSubPathname(), "\r" ) !== false ) {
-			return false;
-		}
-
-		return true;
+		return ! in_array( $this->getInnerIterator()->getSubPathname(), $this->exclude );
 	}
 
 	public function getChildren() {

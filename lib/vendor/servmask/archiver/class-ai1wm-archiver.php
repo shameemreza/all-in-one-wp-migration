@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2019 ServMask Inc.
+ * Copyright (C) 2014-2018 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,10 +22,6 @@
  * ███████║███████╗██║  ██║ ╚████╔╝ ██║ ╚═╝ ██║██║  ██║███████║██║  ██╗
  * ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  */
-
-if ( ! defined( 'ABSPATH' ) ) {
-	die( 'Kangaroos cannot jump here' );
-}
 
 abstract class Ai1wm_Archiver {
 
@@ -195,27 +191,17 @@ abstract class Ai1wm_Archiver {
 	 * @return bool
 	 */
 	public function is_valid() {
-		// Failed detecting the current file pointer offset
-		if ( ( $offset = @ftell( $this->file_handle ) ) === false ) {
-			return false;
+		if ( ( $offset = @ftell( $this->file_handle ) ) !== false ) {
+			if ( @fseek( $this->file_handle, -4377, SEEK_END ) !== -1 ) {
+				if ( @fread( $this->file_handle, 4377 ) === $this->eof ) {
+					if ( @fseek( $this->file_handle, $offset, SEEK_SET ) !== -1 ) {
+						return true;
+					}
+				}
+			}
 		}
 
-		// Failed seeking the beginning of EOL block
-		if ( @fseek( $this->file_handle, -4377, SEEK_END ) === -1 ) {
-			return false;
-		}
-
-		// Trailing block does not match EOL: file is incomplete
-		if ( @fread( $this->file_handle, 4377 ) !== $this->eof ) {
-			return false;
-		}
-
-		// Failed returning to original offset
-		if ( @fseek( $this->file_handle, $offset, SEEK_SET ) === -1 ) {
-			return false;
-		}
-
-		return true;
+		return false;
 	}
 
 	/**

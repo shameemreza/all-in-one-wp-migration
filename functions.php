@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2019 ServMask Inc.
+ * Copyright (C) 2014-2018 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,10 +22,6 @@
  * ███████║███████╗██║  ██║ ╚████╔╝ ██║ ╚═╝ ██║██║  ██║███████║██║  ██╗
  * ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  */
-
-if ( ! defined( 'ABSPATH' ) ) {
-	die( 'Kangaroos cannot jump here' );
-}
 
 /**
  * Get storage absolute path
@@ -280,7 +276,7 @@ function ai1wm_multisite_bytes( $params ) {
  * @return string
  */
 function ai1wm_archive_size( $params ) {
-	return ai1wm_size_format( filesize( ai1wm_archive_path( $params ) ) );
+	return size_format( filesize( ai1wm_archive_path( $params ) ) );
 }
 
 /**
@@ -290,7 +286,7 @@ function ai1wm_archive_size( $params ) {
  * @return string
  */
 function ai1wm_backup_size( $params ) {
-	return ai1wm_size_format( filesize( ai1wm_backup_path( $params ) ) );
+	return size_format( filesize( ai1wm_backup_path( $params ) ) );
 }
 
 /**
@@ -314,23 +310,6 @@ function ai1wm_parse_size( $size, $default = null ) {
 	}
 
 	return $default;
-}
-
-/**
- * Format file size into human-readable string
- *
- * Fixes the WP size_format bug: size_format( '0' ) => false
- *
- * @param  int|string   $bytes            Number of bytes. Note max integer size for integers.
- * @param  int          $decimals         Optional. Precision of number of decimal places. Default 0.
- * @return string|false False on failure. Number string on success.
- */
-function ai1wm_size_format( $bytes, $decimals = 0 ) {
-	if ( strval( $bytes ) === '0' ) {
-		return size_format( 0, $decimals );
-	}
-
-	return size_format( $bytes, $decimals );
 }
 
 /**
@@ -412,7 +391,7 @@ function ai1wm_archive_bucket( $blog_id = null ) {
 	// Add domain
 	if ( ( $domain = explode( '.', parse_url( get_site_url( $blog_id ), PHP_URL_HOST ) ) ) ) {
 		foreach ( $domain as $subdomain ) {
-			if ( $subdomain = strtolower( preg_replace( '/[^A-Za-z0-9\-]/', '', $subdomain ) ) ) {
+			if ( $subdomain ) {
 				$name[] = $subdomain;
 			}
 		}
@@ -421,7 +400,7 @@ function ai1wm_archive_bucket( $blog_id = null ) {
 	// Add path
 	if ( ( $path = explode( '/', parse_url( get_site_url( $blog_id ), PHP_URL_PATH ) ) ) ) {
 		foreach ( $path as $directory ) {
-			if ( $directory = strtolower( preg_replace( '/[^A-Za-z0-9\-]/', '', $directory ) ) ) {
+			if ( $directory ) {
 				$name[] = $directory;
 			}
 		}
@@ -442,7 +421,7 @@ function ai1wm_archive_vault( $blog_id = null ) {
 	// Add domain
 	if ( ( $domain = explode( '.', parse_url( get_site_url( $blog_id ), PHP_URL_HOST ) ) ) ) {
 		foreach ( $domain as $subdomain ) {
-			if ( $subdomain = strtolower( preg_replace( '/[^A-Za-z0-9\-]/', '', $subdomain ) ) ) {
+			if ( $subdomain ) {
 				$name[] = $subdomain;
 			}
 		}
@@ -451,7 +430,7 @@ function ai1wm_archive_vault( $blog_id = null ) {
 	// Add path
 	if ( ( $path = explode( '/', parse_url( get_site_url( $blog_id ), PHP_URL_PATH ) ) ) ) {
 		foreach ( $path as $directory ) {
-			if ( $directory = strtolower( preg_replace( '/[^A-Za-z0-9\-]/', '', $directory ) ) ) {
+			if ( $directory ) {
 				$name[] = $directory;
 			}
 		}
@@ -502,7 +481,7 @@ function ai1wm_archive_share( $blog_id = null ) {
 	// Add domain
 	if ( ( $domain = explode( '.', parse_url( get_site_url( $blog_id ), PHP_URL_HOST ) ) ) ) {
 		foreach ( $domain as $subdomain ) {
-			if ( $subdomain = strtolower( preg_replace( '/[^A-Za-z0-9\-]/', '', $subdomain ) ) ) {
+			if ( $subdomain ) {
 				$name[] = $subdomain;
 			}
 		}
@@ -511,7 +490,7 @@ function ai1wm_archive_share( $blog_id = null ) {
 	// Add path
 	if ( ( $path = explode( '/', parse_url( get_site_url( $blog_id ), PHP_URL_PATH ) ) ) ) {
 		foreach ( $path as $directory ) {
-			if ( $directory = strtolower( preg_replace( '/[^A-Za-z0-9\-]/', '', $directory ) ) ) {
+			if ( $directory ) {
 				$name[] = $directory;
 			}
 		}
@@ -705,7 +684,7 @@ function ai1wm_plugin_filters( $filters = array() ) {
 		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . 'all-in-one-wp-migration-box-extension';
 	}
 
-	// DigitalOcean Spaces Extension
+	// DigitalOcean Extension
 	if ( defined( 'AI1WMIE_PLUGIN_BASENAME' ) ) {
 		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . dirname( AI1WMIE_PLUGIN_BASENAME );
 	} else {
@@ -717,13 +696,6 @@ function ai1wm_plugin_filters( $filters = array() ) {
 		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . dirname( AI1WMDE_PLUGIN_BASENAME );
 	} else {
 		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . 'all-in-one-wp-migration-dropbox-extension';
-	}
-
-	// File Extension
-	if ( defined( 'AI1WMTE_PLUGIN_BASENAME' ) ) {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . dirname( AI1WMTE_PLUGIN_BASENAME );
-	} else {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . 'all-in-one-wp-migration-file-extension';
 	}
 
 	// FTP Extension
@@ -782,13 +754,6 @@ function ai1wm_plugin_filters( $filters = array() ) {
 		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . 'all-in-one-wp-migration-pcloud-extension';
 	}
 
-	// S3 Client Extension
-	if ( defined( 'AI1WNE_PLUGIN_BASENAME' ) ) {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . dirname( AI1WMNE_PLUGIN_BASENAME );
-	} else {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . 'all-in-one-wp-migration-s3-client-extension';
-	}
-
 	// Amazon S3 Extension
 	if ( defined( 'AI1WMSE_PLUGIN_BASENAME' ) ) {
 		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . dirname( AI1WMSE_PLUGIN_BASENAME );
@@ -808,13 +773,6 @@ function ai1wm_plugin_filters( $filters = array() ) {
 		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . dirname( AI1WMLE_PLUGIN_BASENAME );
 	} else {
 		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . 'all-in-one-wp-migration-url-extension';
-	}
-
-	// WebDAV Extension
-	if ( defined( 'AI1WMWE_PLUGIN_BASENAME' ) ) {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . dirname( AI1WMWE_PLUGIN_BASENAME );
-	} else {
-		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . 'all-in-one-wp-migration-webdav-extension';
 	}
 
 	return $filters;
@@ -846,7 +804,7 @@ function ai1wm_active_servmask_plugins( $plugins = array() ) {
 		$plugins[] = AI1WMBE_PLUGIN_BASENAME;
 	}
 
-	// DigitalOcean Spaces Extension
+	// DigitalOcean Extension
 	if ( defined( 'AI1WMIE_PLUGIN_BASENAME' ) ) {
 		$plugins[] = AI1WMIE_PLUGIN_BASENAME;
 	}
@@ -854,11 +812,6 @@ function ai1wm_active_servmask_plugins( $plugins = array() ) {
 	// Dropbox Extension
 	if ( defined( 'AI1WMDE_PLUGIN_BASENAME' ) ) {
 		$plugins[] = AI1WMDE_PLUGIN_BASENAME;
-	}
-
-	// File Extension
-	if ( defined( 'AI1WMTE_PLUGIN_BASENAME' ) ) {
-		$plugins[] = AI1WMTE_PLUGIN_BASENAME;
 	}
 
 	// FTP Extension
@@ -901,11 +854,6 @@ function ai1wm_active_servmask_plugins( $plugins = array() ) {
 		$plugins[] = AI1WMPE_PLUGIN_BASENAME;
 	}
 
-	// S3 Client Extension
-	if ( defined( 'AI1WMNE_PLUGIN_BASENAME' ) ) {
-		$plugins[] = AI1WMNE_PLUGIN_BASENAME;
-	}
-
 	// Amazon S3 Extension
 	if ( defined( 'AI1WMSE_PLUGIN_BASENAME' ) ) {
 		$plugins[] = AI1WMSE_PLUGIN_BASENAME;
@@ -919,11 +867,6 @@ function ai1wm_active_servmask_plugins( $plugins = array() ) {
 	// URL Extension
 	if ( defined( 'AI1WMLE_PLUGIN_BASENAME' ) ) {
 		$plugins[] = AI1WMLE_PLUGIN_BASENAME;
-	}
-
-	// WebDAV Extension
-	if ( defined( 'AI1WMWE_PLUGIN_BASENAME' ) ) {
-		$plugins[] = AI1WMWE_PLUGIN_BASENAME;
 	}
 
 	return $plugins;
@@ -1336,6 +1279,52 @@ function ai1wm_copy( $source_file, $destination_file ) {
 }
 
 /**
+ * Get the size of file in bytes
+ *
+ * This method supports files > 2GB on PHP x86
+ *
+ * @param string  $file_path Path to the file
+ * @param boolean $as_string Return the filesize as string instead of BigInteger
+ *
+ * @return mixed Math_BigInteger|string|null
+ */
+function ai1wm_filesize( $file_path, $as_string = true ) {
+	$chunk_size = 2000000; // 2MB
+	$file_size  = new Math_BigInteger( 0 );
+
+	try {
+		$file_handle = ai1wm_open( $file_path, 'rb' );
+
+		while ( ! feof( $file_handle ) ) {
+			$bytes     = ai1wm_read( $file_handle, $chunk_size );
+			$file_size = $file_size->add( new Math_BigInteger( strlen( $bytes ) ) );
+		}
+
+		ai1wm_close( $file_handle );
+
+		return $as_string ? $file_size->toString() : $file_size;
+	} catch ( Exception $e ) {
+		return null;
+	}
+}
+
+/**
+ * Return the smaller of two numbers
+ *
+ * @param Math_BigInteger $a First number
+ * @param Math_BigInteger $b Second number
+ *
+ * @return Math_BigInteger
+ */
+function ai1wm_find_smaller_number( Math_BigInteger $a, Math_BigInteger $b ) {
+	if ( $a->compare( $b ) === -1 ) {
+		return $a;
+	}
+
+	return $b;
+}
+
+/**
  * Check whether file size is supported by current PHP version
  *
  * @param  string  $file         Path to file
@@ -1359,6 +1348,23 @@ function ai1wm_is_filesize_supported( $file, $php_int_size = PHP_INT_SIZE, $php_
 	}
 
 	return $size_result;
+}
+
+/**
+ * Wrapper around fseek
+ *
+ * This function works with offsets that are > PHP_INT_MAX
+ *
+ * @param resource        $file_handle Handle to the file
+ * @param Math_BigInteger $offset      Offset of the file
+ */
+function ai1wm_fseek( $file_handle, Math_BigInteger $offset ) {
+	$chunk_size = ai1wm_find_smaller_number( new Math_BigInteger( 2000000 ), $offset );
+	while ( ! feof( $file_handle ) && $offset->toString() != '0' ) {
+		$bytes      = ai1wm_read( $file_handle, $chunk_size->toInteger() );
+		$offset     = $offset->subtract( new Math_BigInteger( strlen( $bytes ) ) );
+		$chunk_size = ai1wm_find_smaller_number( $chunk_size, $offset );
+	}
 }
 
 /**
@@ -1420,82 +1426,9 @@ function ai1wm_setup_environment() {
 		@mb_internal_encoding( 'ISO-8859-1' );
 	}
 
-	// Clean (erase) the output buffer and turn off output buffering
-	if ( @ob_get_length() ) {
-		@ob_end_clean();
-	}
-
 	// Set error handler
 	@set_error_handler( 'Ai1wm_Handler::error' );
 
 	// Set shutdown handler
 	@register_shutdown_function( 'Ai1wm_Handler::shutdown' );
-}
-
-/**
- * Get WordPress time zone string
- *
- * @return string
- */
-function ai1wm_get_timezone_string() {
-	if ( ( $timezone_string = get_option( 'timezone_string' ) ) ) {
-		return $timezone_string;
-	}
-
-	if ( ( $gmt_offset = get_option( 'gmt_offset' ) ) ) {
-		if ( $gmt_offset > 0 ) {
-			return sprintf( 'UTC+%s', abs( $gmt_offset ) );
-		} elseif ( $gmt_offset < 0 ) {
-			return sprintf( 'UTC-%s', abs( $gmt_offset ) );
-		}
-	}
-
-	return 'UTC';
-}
-
-/**
- * Get WordPress filter hooks
- *
- * @param  string $tag The name of the filter hook
- * @return array
- */
-function ai1wm_get_filters( $tag ) {
-	global $wp_filter;
-
-	// Get WordPress filter hooks
-	$filters = array();
-	if ( isset( $wp_filter[ $tag ] ) ) {
-		if ( ( $filters = $wp_filter[ $tag ] ) ) {
-			// WordPress 4.7 introduces new class for working with filters/actions called WP_Hook
-			// which adds another level of abstraction and we need to address it.
-			if ( isset( $filters->callbacks ) ) {
-				$filters = $filters->callbacks;
-			}
-		}
-
-		ksort( $filters );
-	}
-
-	return $filters;
-}
-
-/**
- * i18n friendly version of basename()
- *
- * @param  string $path   File path
- * @param  string $suffix If the filename ends in suffix this will also be cut off
- * @return string
- */
-function ai1wm_basename( $path, $suffix = '' ) {
-	return urldecode( basename( str_replace( array( '%2F', '%5C' ), '/', urlencode( $path ) ), $suffix ) );
-}
-
-/**
- * i18n friendly version of dirname()
- *
- * @param  string $path File path
- * @return string
- */
-function ai1wm_dirname( $path ) {
-	return urldecode( dirname( str_replace( array( '%2F', '%5C' ), '/', urlencode( $path ) ) ) );
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2019 ServMask Inc.
+ * Copyright (C) 2014-2018 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,10 +22,6 @@
  * ███████║███████╗██║  ██║ ╚████╔╝ ██║ ╚═╝ ██║██║  ██║███████║██║  ██╗
  * ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  */
-
-if ( ! defined( 'ABSPATH' ) ) {
-	die( 'Kangaroos cannot jump here' );
-}
 
 class Ai1wm_Export_Enumerate {
 
@@ -64,7 +60,7 @@ class Ai1wm_Export_Enumerate {
 
 			// Exclude inactive themes
 			if ( isset( $params['options']['no_inactive_themes'] ) ) {
-				foreach ( search_theme_directories() as $theme => $info ) {
+				foreach ( wp_get_themes() as $theme => $info ) {
 					// Exclude current parent and child themes
 					if ( ! in_array( $theme, array( get_template(), get_stylesheet() ) ) ) {
 						$inactive_themes[] = 'themes' . DIRECTORY_SEPARATOR . $theme;
@@ -111,6 +107,9 @@ class Ai1wm_Export_Enumerate {
 
 		// Iterate over content directory
 		$iterator = new Ai1wm_Recursive_Directory_Iterator( WP_CONTENT_DIR );
+
+		// Exclude new line file names
+		$iterator = new Ai1wm_Recursive_Newline_Filter( $iterator );
 
 		// Exclude uploads, plugins or themes
 		$iterator = new Ai1wm_Recursive_Exclude_Filter( $iterator, apply_filters( 'ai1wm_exclude_content_from_export', $exclude_filters ) );
